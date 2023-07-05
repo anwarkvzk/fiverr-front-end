@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Navbar() {
   const [active, setActive] = useState(true);
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+
+  const { pathname } = useLocation();
 
   const isActive = () => {
     window.scrollY > 0 ? setActive(true) : setActive(false);
@@ -23,12 +25,12 @@ function Navbar() {
     isSeller: true,
   };
   return (
-    <div className={active ? "navbar active" : "navbar"}>
+    <div className={active || pathname !== "/" ? "navbar active" : "navbar"}>
       <div className="container">
         <div className="logo">
-          {/* <Link to='/'> */}
-          {/* </Link> */}
-          <span className="text">fiverr</span>
+          <Link to="/" className="link">
+            <span className="text">fiverr</span>
+          </Link>
           <span className="dot">.</span>
         </div>
         <div className="links">
@@ -39,34 +41,71 @@ function Navbar() {
           {!currentUser?.isSeller && <span>Become a Seller</span>}
           {!currentUser && <button>Join</button>}
           {currentUser && (
-            <div className="user" onClick={()=> setOpen(!open)}>
+            <div className="user" onClick={() => setOpen(!open)}>
               <img
                 src="https://images.pexels.com/photos/8353841/pexels-photo-8353841.jpeg?auto=compress&cs=tinysrgb&w=1600"
                 alt=""
               />
               <span>{currentUser?.username}</span>
-              {open && <div className="options">
-                {currentUser?.isSeller && (
-                  <>
-                    <span>Gigs</span>
-                    <span>Add New Gig</span>
-                  </>
-                )}
-                <span>Orders</span>
-                <span>Messages</span>
-                <span>Logout</span>
-              </div>}
+              {open && (
+                <div className="options">
+                  {currentUser?.isSeller && (
+                    <>
+                      <Link className="link" to="/mygigs">
+                        Gigs
+                      </Link>
+                      <Link className="link" to="/add">
+                        Add New Gig
+                      </Link>
+                    </>
+                  )}
+                  <Link className="link" to="orders">
+                    Orders
+                  </Link>
+                  <Link className="link" to="messages">
+                    Messages
+                  </Link>
+                  <Link className="link" to="/">
+                    Logout
+                  </Link>
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
-      {active && (
+      {(active || pathname !== "/") && (
         <>
           <hr />
-          <hr />
+
           <div className="menu">
-            <span>Test</span>
-            <span>Test1</span>
+            <Link className="link menuLink" to="/">
+              Graphics & Design
+            </Link>
+            <Link className="link" to="/">
+              Video & Animation
+            </Link>
+            <Link className="link" to="/">
+              Writting & Translation
+            </Link>
+            <Link className="link" to="/">
+              AI Services
+            </Link>
+            <Link className="link" to="/">
+              Digital Marketing
+            </Link>
+            <Link className="link" to="/">
+              Music & Audio
+            </Link>
+            <Link className="link" to="/">
+              Programming & Tech
+            </Link>
+            <Link className="link" to="/">
+              Business
+            </Link>
+            <Link className="link" to="/">
+              Lifestyle
+            </Link>
           </div>
         </>
       )}
